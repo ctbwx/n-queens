@@ -129,7 +129,20 @@
       return false;
     },
 
+    buildBufferBoard: function() {
+      let bufferSize = this.get('n') * 2;
+      let boardL = [];
+      let boardR = [];
+      let buffer = new Array(this.get('n')).fill(0);
 
+      for (var i = 0; i < this.get('n'); i++) {
+        boardL.push(buffer.concat(this.get(i)));
+        boardR.push(this.get(i).concat(buffer));
+      }
+
+      this.set('bufferBoardL', boardL);
+      this.set('bufferBoardR', boardR);
+    },
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
@@ -155,12 +168,11 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       let bufferSize = this.get('n') * 2;
-      let board = [];
-      let buffer = new Array(this.get('n')).fill(0);
 
-      for (var i = 0; i < this.get('n'); i++) {
-        board.push(buffer.concat(this.get(i)));
+      if (!this.get('bufferBoardL')) {
+        this.buildBufferBoard();
       }
+      let board = this.get('bufferBoardL');
 
       for (var i = 0; i < bufferSize; i++) {
         if (this.hasMajorDiagonalConflictAt(i, board)) {
@@ -198,12 +210,11 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       let bufferSize = this.get('n') * 2;
-      let board = [];
-      let buffer = new Array(this.get('n')).fill(0);
 
-      for (var i = 0; i < this.get('n'); i++) {
-        board.push(this.get(i).concat(buffer));
+      if (!this.get('bufferBoardR')) {
+        this.buildBufferBoard();
       }
+      let board = this.get('bufferBoardR');
 
       for (var i = 0; i < bufferSize; i++) {
         if (this.hasMinorDiagonalConflictAt(i, board)) {
