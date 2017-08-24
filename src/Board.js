@@ -169,10 +169,17 @@
     hasAnyMajorDiagonalConflicts: function() {
       let bufferSize = this.get('n') * 2;
 
-      if (!this.get('bufferBoardL')) {
-        this.buildBufferBoard();
+      // if (!this.get('bufferBoardL')) {
+      //   this.buildBufferBoard();
+      // }
+      // let board = this.get('bufferBoardL');
+
+      let board = [];
+      let buffer = new Array(this.get('n')).fill(0);
+
+      for (var i = 0; i < this.get('n'); i++) {
+        board.push(buffer.concat(this.get(i)));
       }
-      let board = this.get('bufferBoardL');
 
       for (var i = 0; i < bufferSize; i++) {
         if (this.hasMajorDiagonalConflictAt(i, board)) {
@@ -211,10 +218,17 @@
     hasAnyMinorDiagonalConflicts: function() {
       let bufferSize = this.get('n') * 2;
 
-      if (!this.get('bufferBoardR')) {
-        this.buildBufferBoard();
+      // if (!this.get('bufferBoardR')) {
+      //   this.buildBufferBoard();
+      // }
+      // let board = this.get('bufferBoardR');
+
+      let board = [];
+      let buffer = new Array(this.get('n')).fill(0);
+
+      for (var i = 0; i < this.get('n'); i++) {
+        board.push(this.get(i).concat(buffer));
       }
-      let board = this.get('bufferBoardR');
 
       for (var i = 0; i < bufferSize; i++) {
         if (this.hasMinorDiagonalConflictAt(i, board)) {
